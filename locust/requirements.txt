@@ -1,4 +1,0 @@
-locust
-requests
-kubernetes
-
