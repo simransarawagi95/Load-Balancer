@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-master
+  template:
+    metadata:
+      labels:
+        app: locust-master
+    spec:
+      containers:
+        - name: locust-master
+          image: simransar/locust-load-tester:latest
+          args: ["--master"]
+          ports:
+            - name: loc-master-web
+              containerPort: 8089
+              protocol: TCP
+            - name: loc-master-p1
+              containerPort: 5557
+              protocol: TCP
+          resources:                             # Define resource requests and limits
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+

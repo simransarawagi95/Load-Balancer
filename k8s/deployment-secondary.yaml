@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-secondary
+  namespace: default
+  labels:
+    app: node-app-secondary
+    app.kubernetes.io/name: node-app          # Ensures selection by LoadBalancer
+    app.kubernetes.io/component: secondary      # Indicates this is the primary component
+    app.kubernetes.io/part-of: node-app       # Part of the node-app suite
+    app.kubernetes.io/managed-by: Kubernetes  # Managed by Kubernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app-secondary
+  template:
+    metadata:
+      labels:
+        app: node-app-secondary
+        app.kubernetes.io/name: node-app
+    spec:
+      containers:
+      - name: node-app  # Add a unique name for the container
+        image: simransar/failover-node-app:latest
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:                             # Define resource requests and limits
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

@@ -1,0 +1,13 @@
+{
+  "name": "failover-loadbalancer-app",
+  "version": "1.0.0",
+  "description": "Node.js app for failover load balancer",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "axios": "^1.7.7"
+  }
+}
